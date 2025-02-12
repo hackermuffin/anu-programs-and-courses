@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import requests
+import pandas as pd
 
 
 def parse_url():
@@ -59,11 +60,17 @@ def get_courses(year=2025):
     return resp.json()["Items"]
 
 
-def main():
+def save_to_csv(year=2025, outfile=None):
+    if outfile is None:
+        outfile = "./" + str(year) + ".csv"
+    courses = get_courses(year)
+    df = pd.DataFrame.from_dict(courses)
+    df.to_csv(outfile)
 
-    courses = get_courses(2020)
-    print(len(courses))
-    print(courses[0])
+
+def main():
+    for year in range(2014, 2026):
+        save_to_csv(year)
 
 
 if __name__ == "__main__":
